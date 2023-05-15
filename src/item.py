@@ -30,6 +30,8 @@ class Item:
         else:
             raise ValueError("Количество должно быть выражено целым числом")
 
+        self.all.append(self)
+
     def calculate_total_price(self) -> float:
         """
         Рассчитывает общую стоимость конкретного товара в магазине.
