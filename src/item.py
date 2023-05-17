@@ -1,9 +1,14 @@
+from csv import DictReader
+import os
+
+
 class Item:
     """
     Класс для представления товара в магазине.
     """
     pay_rate = 1.0
     all = []
+    path_to_cvs = os.path.join(os.path.dirname(__file__), "items.csv")
 
     def __init__(self, name: str, price: float, quantity: int) -> None:
         """
@@ -21,6 +26,7 @@ class Item:
         self.price = price
 
         self.__quantity = None
+        self.quantity = quantity
 
         self.all.append(self)
 
@@ -77,3 +83,29 @@ class Item:
             raise ValueError("Размер скидки задан неверно!")
         else:
             self.price *= self.pay_rate
+
+    @classmethod
+    def instantiate_from_csv(cls):
+        with open(cls.path_to_cvs) as csv_file:
+            data_cvs = DictReader(csv_file)
+
+            for row in data_cvs:
+                name, price, quantity = row.values()
+                price = cls.string_to_number(price)
+                quantity = cls.string_to_number(quantity)
+                cls(name, price, quantity)
+
+    @staticmethod
+    def string_to_number(string):
+        if "." in string:
+            try:
+                number = float(string)
+            except ValueError:
+                raise ValueError("Нельзя превратить в число!")
+            return number
+        else:
+            try:
+                number = int(string)
+            except ValueError:
+                raise ValueError("Нельзя превратить в целое число!")
+            return number
