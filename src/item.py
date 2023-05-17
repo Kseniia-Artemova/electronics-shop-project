@@ -1,9 +1,14 @@
+from csv import DictReader
+import os
+
+
 class Item:
     """
     Класс для представления товара в магазине.
     """
     pay_rate = 1.0
     all = []
+    path_to_cvs = os.path.join(os.path.dirname(__file__), "items.csv")
 
     def __init__(self, name: str, price: float, quantity: int) -> None:
         """
@@ -13,24 +18,52 @@ class Item:
         :param price: Цена за единицу товара.
         :param quantity: Количество товара в магазине.
         """
-        if type(name) is str:
-            self.name = name
-        else:
-            raise ValueError("Наименование должно быть строкой")
 
-        if type(price) is float:
-            self.price = price
-        elif type(price) is int:
-            self.price = float(price)
-        else:
-            raise ValueError("Цена должна быть числом")
+        self.__name = None
+        self.name = name
 
-        if type(quantity) is int:
-            self.quantity = quantity
-        else:
-            raise ValueError("Количество должно быть выражено целым числом")
+        self.__price = None
+        self.price = price
+
+        self.__quantity = None
+        self.quantity = quantity
 
         self.all.append(self)
+
+    @property
+    def name(self):
+        return self.__name
+
+    @name.setter
+    def name(self, name):
+        if not isinstance(name, str):
+            raise ValueError("Наименование должно быть строкой")
+        elif len(name) > 10:
+            raise Exception("Длина наименования товара превышает 10 символов.")
+        else:
+            self.__name = name
+
+    @property
+    def price(self):
+        return self.__price
+
+    @price.setter
+    def price(self, price):
+        if type(price) not in (int, float):
+            raise Exception("Цена должна быть числом")
+        else:
+            self.__price = float(price)
+
+    @property
+    def quantity(self):
+        return self.__quantity
+
+    @quantity.setter
+    def quantity(self, quantity):
+        if type(quantity) is not int:
+            raise Exception("Количество должно быть выражено целым числом")
+        else:
+            self.__quantity = quantity
 
     def calculate_total_price(self) -> float:
         """
@@ -38,22 +71,41 @@ class Item:
 
         :return: Общая стоимость товара.
         """
-        if not isinstance(self.price, (int, float)):
-            raise ValueError("Цена задана неверно!")
-        elif not isinstance(self.quantity, int):
-            raise ValueError("Количество задано неверно!")
-        else:
-            return self.price * self.quantity
+        return self.price * self.quantity
 
     def apply_discount(self) -> None:
         """
         Применяет установленную скидку для конкретного товара.
         """
-        if not isinstance(self.price, (int, float)):
-            raise ValueError("Цена задана неверно!")
-        elif not isinstance(self.pay_rate, float):
+        if not isinstance(self.pay_rate, float):
             raise ValueError("Размер скидки задан неверно!")
         elif self.pay_rate > 1:
             raise ValueError("Размер скидки задан неверно!")
         else:
             self.price *= self.pay_rate
+
+    @classmethod
+    def instantiate_from_csv(cls):
+        with open(cls.path_to_cvs) as csv_file:
+            data_cvs = DictReader(csv_file)
+
+            for row in data_cvs:
+                name, price, quantity = row.values()
+                price = cls.string_to_number(price)
+                quantity = cls.string_to_number(quantity)
+                cls(name, price, quantity)
+
+    @staticmethod
+    def string_to_number(string):
+        if "." in string:
+            try:
+                number = float(string)
+            except ValueError:
+                raise ValueError("Нельзя превратить в число!")
+            return number
+        else:
+            try:
+                number = int(string)
+            except ValueError:
+                raise ValueError("Нельзя превратить в целое число!")
+            return number
