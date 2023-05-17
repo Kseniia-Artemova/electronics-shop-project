@@ -24,16 +24,16 @@ def test_create_int(item):
 
 def test_create_incorrect():
     with pytest.raises(ValueError):
-        item = Item(8, 5299, 8)
+        Item(8, 5299, 8)
 
     with pytest.raises(Exception):
-        item = Item("Принтер Epson L121 (C11CD76414)", 5299, 8)
+        Item("Принтер Epson L121 (C11CD76414)", 5299, 8)
 
     with pytest.raises(Exception):
-        item = Item("Принтер Epson L121 (C11CD76414)", "5299", 8)
+        Item("Принтер Epson L121 (C11CD76414)", "5299", 8)
 
     with pytest.raises(Exception):
-        item = Item("Принтер Epson L121 (C11CD76414)", 5299, "8")
+        Item("Принтер Epson L121 (C11CD76414)", 5299, "8")
 
 
 def test_price_incorrect(item):
@@ -76,3 +76,19 @@ def test_instantiate_from_csv():
 
     with pytest.raises(IndexError):
         print(Item.all[5])
+
+
+def test_string_to_number_correct():
+    assert Item.string_to_number("89") == 89
+    assert type(Item.string_to_number("89")) is int
+
+    assert Item.string_to_number("169.11") == 169.11
+    assert type(Item.string_to_number("169.11")) is float
+
+
+def test_string_to_number_incorrect():
+    with pytest.raises(ValueError):
+        Item.string_to_number("восемь")
+
+    with pytest.raises(ValueError):
+        Item.string_to_number("восемь.одиннадцать")
