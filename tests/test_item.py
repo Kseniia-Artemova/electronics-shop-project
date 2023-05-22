@@ -92,3 +92,12 @@ def test_string_to_number_incorrect():
 
     with pytest.raises(ValueError):
         Item.string_to_number("восемь.одиннадцать")
+
+
+def test_repr(item):
+    assert repr(item) == f"Item(\'{item.name}\', {item.price}, {item.quantity})"
+
+
+def test_str(item):
+    assert str(item) == f"{item.name}"
+
