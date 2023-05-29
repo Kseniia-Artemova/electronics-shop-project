@@ -74,11 +74,11 @@ class Item:
 
         Проверки:
 
-        стоимость должна быть целым числом, либо вещественным
+        стоимость должна быть целым, либо вещественным неотрицательным числом
         """
 
-        if type(price) not in (int, float):
-            raise Exception("Цена должна быть числом")
+        if type(price) not in (int, float) or price < 0:
+            raise Exception("Цена должна быть неотрицательным числом")
         else:
             self.__price = float(price)
 
@@ -93,11 +93,11 @@ class Item:
 
         Проверки:
 
-        количество должно быть целым числом
+        количество должно быть целым неотрицательным числом
         """
 
-        if type(quantity) is not int:
-            raise Exception("Количество должно быть выражено целым числом")
+        if type(quantity) is not int or quantity < 0:
+            raise Exception("Количество должно быть выражено целым неотрицательным числом")
         else:
             self.__quantity = quantity
 

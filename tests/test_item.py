@@ -30,10 +30,16 @@ def test_create_incorrect():
         Item("Принтер Epson L121 (C11CD76414)", 5299, 8)
 
     with pytest.raises(Exception):
-        Item("Принтер Epson L121 (C11CD76414)", "5299", 8)
+        Item("Принтер", "5299", 8)
 
     with pytest.raises(Exception):
-        Item("Принтер Epson L121 (C11CD76414)", 5299, "8")
+        Item("Принтер", 5299, "8")
+
+    with pytest.raises(Exception):
+        Item("Принтер", 5299, -8)
+
+    with pytest.raises(Exception):
+        Item("Принтер", -5299, 8)
 
 
 def test_price_incorrect(item):
@@ -101,3 +107,17 @@ def test_repr(item):
 def test_str(item):
     assert str(item) == f"{item.name}"
 
+
+def test_add_correct(item):
+    item_2 = Item("Tablet", 10_000, 4)
+    assert item + item_2 == 12
+
+
+def test_add_incorrect(item):
+    item_2 = 4
+    with pytest.raises(TypeError):
+        item + item_2
+
+    item_2 = "4"
+    with pytest.raises(TypeError):
+        item + item_2
