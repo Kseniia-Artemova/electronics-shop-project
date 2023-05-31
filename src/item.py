@@ -13,20 +13,15 @@ class Item:
 
     def __init__(self, name: str, price: float, quantity: int) -> None:
         """
-        Создание экземпляра класса item.
+        Создание экземпляра класса Item.
 
-        :param name: Название товара.
-        :param price: Цена за единицу товара.
+        :param name: Название товара
+        :param price: Цена за единицу товара
         :param quantity: Количество товара в магазине
         """
 
-        self.__name = None
         self.name = name
-
-        self.__price = None
         self.price = price
-
-        self.__quantity = None
         self.quantity = quantity
 
         self.all.append(self)
