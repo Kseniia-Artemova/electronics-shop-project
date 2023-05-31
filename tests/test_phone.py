@@ -1,5 +1,4 @@
 from src.phone import Phone
-from src.item import Item
 from tests.test_item import item
 import pytest
 
@@ -52,5 +51,3 @@ def test_add_other(phone):
 
     with pytest.raises(TypeError):
         phone + "8"
-
-
