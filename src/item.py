@@ -4,7 +4,7 @@ import os
 
 class Item:
     """
-    Класс для представления товара в магазине.
+    Класс для представления товара в магазине
     """
 
     pay_rate = 1.0
@@ -17,7 +17,7 @@ class Item:
 
         :param name: Название товара.
         :param price: Цена за единицу товара.
-        :param quantity: Количество товара в магазине.
+        :param quantity: Количество товара в магазине
         """
 
         self.__name = None
@@ -34,7 +34,7 @@ class Item:
     def __repr__(self) -> str:
         """Возвращает строку, в которой перечислены свойства класса для просмотра в режиме отладки"""
 
-        return f"{self.__class__.__name__}(\'{self.name}\', {self.price}, {self.quantity})"
+        return f"{self.__class__.__name__}({', '.join(map(repr, self.__dict__.values()))})"
 
     def __str__(self) -> str:
         """Возвращает строку с наименованием товара, рекомендовано для просмотра пользователем"""
@@ -74,11 +74,11 @@ class Item:
 
         Проверки:
 
-        стоимость должна быть целым числом, либо вещественным
+        стоимость должна быть целым, либо вещественным неотрицательным числом
         """
 
-        if type(price) not in (int, float):
-            raise Exception("Цена должна быть числом")
+        if type(price) not in (int, float) or price < 0:
+            raise Exception("Цена должна быть неотрицательным числом")
         else:
             self.__price = float(price)
 
@@ -93,11 +93,11 @@ class Item:
 
         Проверки:
 
-        количество должно быть целым числом
+        количество должно быть целым неотрицательным числом
         """
 
-        if type(quantity) is not int:
-            raise Exception("Количество должно быть выражено целым числом")
+        if type(quantity) is not int or quantity < 0:
+            raise Exception("Количество должно быть выражено целым неотрицательным числом")
         else:
             self.__quantity = quantity
 
@@ -155,3 +155,10 @@ class Item:
             except ValueError:
                 raise ValueError("Нельзя превратить в целое число!")
             return number
+
+    def __add__(self, other):
+        if isinstance(other, self.__class__):
+            return self.quantity + other.quantity
+        else:
+            raise TypeError("Нельзя сложить эти объекты")
+
