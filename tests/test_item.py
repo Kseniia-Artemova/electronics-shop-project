@@ -1,6 +1,8 @@
 """Здесь надо написать тесты с использованием pytest для модуля item."""
 from src.item import Item
+from src.instante_csv_error import InstantiateCSVError
 import pytest
+import os
 
 
 @pytest.fixture
@@ -82,6 +84,21 @@ def test_instantiate_from_csv():
 
     with pytest.raises(IndexError):
         print(Item.all[5])
+
+
+def test_instantiate_from_csv_incorrect():
+    Item.all = []
+    Item.path_to_cvs = os.path.join(os.path.dirname(__file__), "items.csv")
+    with pytest.raises(FileNotFoundError):
+        Item.instantiate_from_csv()
+
+    Item.path_to_cvs = os.path.join(os.path.dirname(__file__), "damaged_items.csv")
+    with pytest.raises(InstantiateCSVError):
+        Item.instantiate_from_csv()
+
+    Item.path_to_cvs = os.path.join(os.path.dirname(__file__), "empty_items.csv")
+    with pytest.raises(TypeError):
+        Item.instantiate_from_csv()
 
 
 def test_string_to_number_correct():
