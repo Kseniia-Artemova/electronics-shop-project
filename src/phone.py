@@ -8,16 +8,15 @@ class Phone(Item):
 
     def __init__(self, name: str, price: float, quantity: int, number_of_sim: int) -> None:
         """
-        Создание экземпляра класса phone.
+        Создание экземпляра класса Phone.
 
         :param name: Название телефона
         :param price: Цена за единицу
-        :param quantity: Количество телефонов в магазине
+        :param quantity: Количество единиц товара в магазине
         :param number_of_sim: Количество слотов для сим-карт в телефоне
         """
 
         super().__init__(name, price, quantity)
-        self.__number_of_sim = None
         self.number_of_sim = number_of_sim
 
     @property
@@ -38,7 +37,12 @@ class Phone(Item):
         else:
             raise ValueError("Количество физических SIM-карт должно быть целым числом больше нуля.")
 
-    def __add__(self, other):
+    def __add__(self, other) -> int:
+        """
+        Переопределяем метод для возможности складывать объекты классов
+        между собой и с объектами родительского класса
+        """
+
         if isinstance(other, (self.__class__, self.__class__.__base__)):
             return self.quantity + other.quantity
         else:
