@@ -140,10 +140,10 @@ class Item:
                         cls(name, price, quantity)
 
                 else:
-                    raise InstantiateCSVError("Файл item.csv поврежден")
+                    raise InstantiateCSVError(f"Файл {cls.path_to_cvs} поврежден")
 
         else:
-            raise FileNotFoundError("Отсутствует файл item.csv")
+            raise FileNotFoundError(f"Отсутствует файл {cls.path_to_cvs}")
 
     @staticmethod
     def string_to_number(string):
