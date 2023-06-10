@@ -1,5 +1,6 @@
 from csv import DictReader
 import os
+from src.instante_csv_error import InstantiateCSVError
 
 
 class Item:
@@ -125,14 +126,24 @@ class Item:
         Путь к файлу является атрибутом класса.
         """
 
-        with open(cls.path_to_cvs) as csv_file:
-            data_cvs = DictReader(csv_file)
+        if os.path.exists(cls.path_to_cvs):
+            with open(cls.path_to_cvs) as csv_file:
+                data_cvs = DictReader(csv_file)
+                cls.all.clear()
 
-            for row in data_cvs:
-                name, price, quantity = row.values()
-                price = cls.string_to_number(price)
-                quantity = cls.string_to_number(quantity)
-                cls(name, price, quantity)
+                if len(data_cvs.fieldnames) == 3:
+
+                    for row in data_cvs:
+                        name, price, quantity = row.values()
+                        price = cls.string_to_number(price)
+                        quantity = cls.string_to_number(quantity)
+                        cls(name, price, quantity)
+
+                else:
+                    raise InstantiateCSVError(f"Файл {cls.path_to_cvs} поврежден")
+
+        else:
+            raise FileNotFoundError(f"Отсутствует файл {cls.path_to_cvs}")
 
     @staticmethod
     def string_to_number(string):
@@ -156,4 +167,3 @@ class Item:
             return self.quantity + other.quantity
         else:
             raise TypeError("Нельзя сложить эти объекты")
-
